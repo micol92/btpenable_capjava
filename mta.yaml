@@ -1,0 +1,69 @@
+_schema-version: '3.1'
+ID: CAPJavaPrg01
+version: 1.0.0-SNAPSHOT
+description: "CAPJavaPrg01 application"
+parameters:
+  enable-parallel-deployments: true
+modules:
+  - name: CAPJavaPrg01-srv
+    type: java
+    path: srv
+    parameters:
+      buildpack: java_buildpack
+    properties:
+      SPRING_PROFILES_ACTIVE: cloud
+    build-parameters:
+      builder: custom
+      commands:
+        - mvn clean package -DskipTests=true
+      build-result: target/*-exec.jar
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: CAPJavaPrg01-db
+      - name: CAPJavaPrg01-conn
+      - name: CAPJavaPrg01-dest
+
+  - name: CAPJavaPrg01-db-deployer
+    type: hdb
+    path: db
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: custom
+      commands:
+        - npm run build
+    requires:
+      - name: CAPJavaPrg01-db
+
+resources:
+  - name: CAPJavaPrg01-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+      config:
+        database_id : 2ec0a886-207d-4c67-bde0-bbec20c27977      
+    properties:
+      hdi-service-name: ${service-name}
+
+
+# ------------------------------------------------------------
+  - name: CAPJavaPrg01-conn
+# ------------------------------------------------------------
+    type: org.cloudfoundry.managed-service
+    parameters:
+     service: connectivity
+     service-name: CAPJavaPrg01-conn-srv
+     service-plan: lite
+
+# ------------------------------------------------------------
+  - name: CAPJavaPrg01-dest
+# ------------------------------------------------------------
+    type: org.cloudfoundry.managed-service
+    parameters:
+     service: destination
+     service-name: CAPJavaPrg01-dest-srv
+     service-plan: lite

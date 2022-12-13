@@ -1,0 +1,80 @@
+####
+POST http://localhost:8080/odata/v4/CatalogService/SaveBook
+Content-Type: application/json
+
+{
+}
+
+### Get Books
+GET http://localhost:8080/odata/v4/cloud.sdk.capng/CapBusinessPartner
+
+### Post Books via Action
+POST http://localhost:8080/odata/v4/cloud.sdk.capng/CapBusinessPartner
+Content-Type: application/json
+
+{
+    "ID" : "99999810",
+    "firstName" : "HAN",
+    "surname" : "WOO",
+    "sourceDestination" : "S4H"
+}
+
+### Get POrders
+GET http://localhost:8080/odata/v4/CatalogService/POrders
+
+### Get POrders
+GET http://localhost:8080/odata/v4/CatalogService/POrders?&$filter=posupplier eq 'USSU-VSF01'
+
+### Post POrders via Action
+POST http://localhost:8080/odata/v4/CatalogService/POrders
+Content-Type: application/json
+
+{
+    "potype" : "NB",
+    "posupplier" : "17300001",
+    "qty": 2
+}
+
+
+### Get Books
+GET http://localhost:8080/odata/v4/CatalogService/Books
+
+
+
+
+### Post Books via Action
+POST http://localhost:8080/odata/v4/CatalogService/SaveBook
+Content-Type: application/json
+
+{
+}
+
+
+
+### Post Books via Action
+POST http://localhost:8080/odata/v4/CatalogService/SaveSingleBook
+Content-Type: application/json
+
+{
+        "ID" : 1004,
+        "title" : "test0001",
+        "stock" : 12 
+}
+
+
+### Post Books via Action
+POST http://localhost:8080/odata/v4/CatalogService/SaveMultipleBooks
+Content-Type: application/json
+
+{
+    "Books" :[ {
+        "ID" : 1003,
+        "title" : "test0001",
+        "stock" : 12 
+    },
+    {
+        "ID" : 1005,
+        "title" : "test0002",
+        "stock" : 16 
+    }]
+}
